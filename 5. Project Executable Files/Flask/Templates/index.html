@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Shipping Prediction</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            padding-top: 56px; /* Adjust padding to match navbar height */
+        }
+        .bg-container{
+            background-image: url("{{ url_for('static', filename='bg home.jpg') }}");
+            background-color: rgba(0, 0, 0, 0);
+            height:99vh;
+            width:100vw;
+            background-size: cover;
+            color:white;
+            text-align: center;
+            padding: 15px;
+        }
+     
+        .section-bg{
+            height: 100vh;
+            width: 100vw;
+            background-color: rgb(255, 255, 255);
+            padding: 30px;
+        }
+        .home-heading{
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 50px;
+        }
+        .home-paragraph{
+            font-size: 20px;
+        }
+        .result{
+        background-color:#FBF4FF;
+        color:black;
+        height:50px;
+        padding:10px;
+        width:800px;
+        text-align:center;
+        margin-left:25%
+        }
+        .home-button{
+            background-color: rgb(252, 244, 8);
+            color:rgb(6, 0, 0);
+            border-radius: 10px;
+            height: 50px;
+            width: 200px;
+            padding: 10px;
+            border-width: 0px;
+            margin-top: 20px;
+        
+        }
+        .div-container{
+            padding: 15px;
+            margin: 15px;
+        }
+        .service-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            height: 170px;
+            width: 370px;
+            padding: 10px;
+            text-align: center;
+        }
+        .service-card .icon {
+            font-size: 2rem;
+            margin-right: 20px;
+        }
+        .service-card .content {
+            flex: 1;
+        }
+        .contact-card {
+            margin-bottom: 20px;
+        }
+        .contact-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        .result-box {
+            margin-top: 20px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-right:30px;
+            margin-left:30px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand" href="#">E-commerce Shipping Prediction</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#about"><i class="fas fa-info-circle"></i> About</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#prediction"><i class="fas fa-chart-line"></i> Prediction</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#services"><i class="fas fa-concierge-bell"></i> Services</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#contact"><i class="fas fa-envelope"></i> Contact</a>
+            </li>
+        </ul>
+    </div>
+    
+</nav>
+<div class="bg-container d-flex flex-column">
+    <br>
+    <br><br>
+    <h1 class="home-heading">Welcome to Ecommerce Shipping Prediction</h1>
+    <p class="home-paragraph">Navigating your deliveries with confidence</p>
+    <a href="#prediction"><button class="home-button">Predict your shipping</button></a>
+    <!-- Display prediction result -->
+
+    <div class="result-box mt-3">
+        <h4>Prediction Result</h4>
+        <p class="result"><strong>{{ prediction }}</strong></p>
+    </div>
+    
+</div>
+
+<!-- Dummy Content -->
+<div class="">
+    <section id="about">
+        <div class="section-bg container">
+            
+            <h1 class="mt-5">About</h1>
+            <p>Ecommerce shipping prediction is the process of estimating the
+                 whether the product reached on time which is based on various factors 
+                 such as the origin and destination of the package, the shipping method selected by the
+                  customer, the carrier used for shipping, and any potential delays or issues that may 
+                  arise during the shipping process. Machine learning models can be used to make 
+                  accurate predictions about shipping times based on historical data and real-time 
+                  updates from carriers. These models may take into account factors such as weather 
+                  conditions, traffic, and other external factors that can impact delivery times. Over 
+                  All Ecommerce shipping prediction is an important tool for ecommerce businesses 
+                  that want to provide accurate delivery estimates to their customers and improve 
+                  their overall customer experience.</p>
+                  <div class="d-flex flex-row div-container"><div><img src="{{ url_for('static', filename='about.jpg') }}" height="300px" width="400px"></div>
+                  
+                  <div class="ml-3">
+                        <h2>Input fields</h2>
+                    <p>The data used for predicting the reachability of product by the ML model is done using the following input fields</p>
+                    <div class="d-flex flex-row ">
+                        <div>
+                            <ul>
+                                <li><b>Warehouse block: </b>F,A,B,C,D</li>
+                                <li><b>Mode of shipment: </b> Flight, Ship, Road</li>
+                                <li><b>Customer care calls: </b>Integer value>1</li>
+                                <li><b>Customer rating: </b>Integer value>1</li>
+                                <li><b>Cost of product: </b>Integer value>1</li>
+                            </ul>
+
+                        </div>
+                        <div>
+                            <ul>
+                                <li><b>Prior purchases: </b>Integer value>1</li>
+                                <li><b>Product Importance: </b>Integer value>1</li>
+                                <li><b>Gender: </b>Male or Female</li>
+                                <li><b>Discounts Offered: </b>Integer value>1</li>
+                                <li><b>Weight in Grams: </b>Integer value>1</li>
+                            </ul>
+                            
+                        </div>
+                    </div>
+                    <p>After entering the above values you can start prediction process to check if your product will reach on time or not.</p>
+                    </div>
+                </div>
+        </div>
+    </section>
+    <section id="prediction" class="mt-5">
+        <div class="container mt-5">
+            <h2 class="mb-4">Shipping Prediction</h2>
+            <form method="post" action="/predict">
+                <div class="form-group">
+                    <label for="product_importance">Product Importance</label>
+                    <select class="form-control" id="product_importance" name="Product_importance">
+                        <option value="None">None</option>
+                        <option value="low">Low</option>
+                        <option value="medium">Medium</option>
+                        <option value="high">High</option>
+                    </select>
+                    <small class="form-text text-muted">Categorical value</small>
+                </div>
+                <div class="form-group">
+                    <label for="gender">Gender</label>
+                    <select class="form-control" id="gender" name="Gender">
+                        <option value="None">None</option>
+                        <option value="male">Male</option>
+                        <option value="female">Female</option>
+                    </select>
+                    <small class="form-text text-muted">Categorical value</small>
+                </div>
+                <div class="form-group">
+                    <label for="discount_offered">Discount Offered</label>
+                    <input type="number" class="form-control" id="discount_offered" name="Discount_offered" min="1" placeholder="Enter discount offered">
+                    <small class="form-text text-muted">Integer > 1</small>
+                </div>
+                <div class="form-group">
+                    <label for="weight_in_grams">Weight in Grams</label>
+                    <input type="number" class="form-control" id="weight_in_grams" name="Weight_in_gms" min="1" placeholder="Enter weight in grams">
+                    <small class="form-text text-muted">Integer > 1</small>
+                </div>
+                <!-- Add fields for the remaining features -->
+                <div class="form-group">
+                    <label for="warehouse_block">Warehouse Block</label>
+                    <select class="form-control" id="warehouse_block" name="Warehouse_block">
+                        <option value="None">None</option>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="F">F</option>
+                    </select>
+                    <small class="form-text text-muted">Categorical value</small>
+                </div>
+                <div class="form-group">
+                    <label for="mode_of_shipment">Mode of Shipment</label>
+                    <select class="form-control" id="mode_of_shipment" name="Mode_of_shipment">
+                        <option value="None">None</option>
+                        <option value="Flight">Flight</option>
+                        <option value="Ship">Ship</option>
+                        <option value="Road">Road</option>
+                    </select>
+                    <small class="form-text text-muted">Categorical value</small>
+                </div>
+                <div class="form-group">
+                    <label for="customer_care_calls">Customer Care Calls</label>
+                    <input type="number" class="form-control" id="customer_care_calls" name="Customer_care_calls" min="1" placeholder="Enter number of calls">
+                    <small class="form-text text-muted">Integer > 1</small>
+                </div>
+                <div class="form-group">
+                    <label for="customer_rating">Customer Rating</label>
+                    <input type="number" class="form-control" id="customer_rating" name="Customer_rating" min="1" placeholder="Enter customer rating">
+                    <small class="form-text text-muted">Integer > 1</small>
+                </div>
+                <div class="form-group">
+                    <label for="cost_of_product">Cost of Product</label>
+                    <input type="number" class="form-control" id="cost_of_product" name="Cost_of_product" min="1" placeholder="Enter cost of product">
+                    <small class="form-text text-muted">Integer > 1</small>
+                </div>
+                <div class="form-group">
+                    <label for="prior_purchases">Prior Purchases</label>
+                    <input type="number" class="form-control" id="prior_purchases" name="Prior_purchases" min="1" placeholder="Enter prior purchases">
+                    <small class="form-text text-muted">Integer > 1</small>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit and Predict</button>
+            </form>
+    
+            <!-- Result Box -->
+            <div class="result-box mt-4">
+                <h4>Prediction Result</h4>
+                <p><strong>Prediction:</strong> {{ prediction }}</p>
+                
+            </div>
+            
+        </div>
+    </section>
+    
+     
+    <section id="services" class="mt-5">
+        <div class="container mt-5" id="services">
+            <br><br><br>
+            <h2 class="mb-4">Our Services</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card service-card">
+                        <div class="icon text-primary">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Shipping Prediction</h4>
+                            <p>Predict the possibility of shipping using provided data.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card service-card">
+                        <div class="icon text-success">
+                            <i class="fas fa-clipboard-check"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Checklist of Data</h4>
+                            <p>Get a checklist for anything by consulting with our trained professionals in diverse fields.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card service-card">
+                        <div class="icon text-warning">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Analytics</h4>
+                            <p>Our team of experts will analyse your data with state-of-the-art technology.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card service-card">
+                        <div class="icon text-danger">
+                            <i class="fas fa-lightbulb"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Deep Insights on Data</h4>
+                            <p>Get effective insights on the data using our deep analytical tool.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card service-card">
+                        <div class="icon text-info">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Predictive Analysis</h4>
+                            <p>Get predictions on the queries you have such as "Will my product get delivered in time?"</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card service-card">
+                        <div class="icon text-secondary">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="content">
+                            <h4>Delivery Scheduling</h4>
+                            <p>Schedule your package deliveries easily with our shipping prediction software.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </body>
+        </html>
+    </section>
+    <section id="contact" class="mt-1">
+        <div class="container mt-5" id="contact">
+            <h2 class="mb-4">Contact Us</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card contact-card">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <i class="fas fa-map-marker-alt contact-icon text-primary"></i>
+                                <strong>Location:</strong>
+                                <p>6th floor, Sundarayya Vignana Kendram, Technical Block, Madhava Reddy colony, Gachibowli, Hyderabad, Telangana, 500032</p>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fas fa-envelope contact-icon text-success"></i>
+                                <strong>Email:</strong>
+                                <p>info@thesmartbridge.com</p>
+                            </div>
+                            <div class="mb-3">
+                                <i class="fas fa-phone contact-icon text-danger"></i>
+                                <strong>Phone:</strong>
+                                <p>+91 8583755885</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <form>
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" class="form-control" id="subject" placeholder="Enter subject">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea class="form-control" id="message" rows="5" placeholder="Enter your message"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Bootstrap and jQuery JS -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+</body>
+</html>
